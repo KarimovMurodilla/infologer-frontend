@@ -3,9 +3,9 @@ import { Navigate } from 'react-router-dom';
 import useAuth from './useAuth';
 
 const ProtectedRoute = ({ children }) => {
-  const { token } = useAuth();
+	const { token } = useAuth();
 
-  return token ? children : <Navigate to="/login" replace />;
+	return token ? children : <Navigate to="/auth/login" replace />;
 };
 
 export default ProtectedRoute;

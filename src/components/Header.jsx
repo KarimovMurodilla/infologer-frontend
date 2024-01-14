@@ -1,19 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Home from "../pages/Home";
-import Search from "../pages/Search";
-import Tasks from "../pages/Tasks";
-import Knows from "../pages/Knows";
-import You from "../pages/You";
-
-import Login from "../auth/Login";
-import PrivateRoute from "../auth/PrivateRoute";
-import Signup from "../auth/SignUp";
+import { Link } from "react-router-dom";
 
 
 const Header = () => {
     return (
-        <Router>
+        <div>
             <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-bottom d-lg-none">
                 <div className="container-fluid">
                     <ul className="navbar-nav w-100">
@@ -68,24 +59,11 @@ const Header = () => {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/you">You</Link>
                             </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/login">Login</Link>
-                            </li>
                         </ul>
                     </div>
                 </div>
             </nav>
-
-            <Routes>
-                <Route exact path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
-                <Route exact path="/search" element={<Search />} />
-                <Route exact path="/tasks" element={<Tasks />} />
-                <Route exact path="/knows" element={<Knows />} />
-                <Route exact path="/you" element={<You />} />
-                <Route exact path="/login" element={<Login />} />
-                <Route exact path="/signup" element={<Signup />} />
-            </Routes>
-        </Router>
+        </div>
     )
 }
 

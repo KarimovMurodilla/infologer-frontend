@@ -1,5 +1,9 @@
 /* Дополнительные стили можно добавить сюда */
 
+/* * {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+} */
+
 body {
   background-color: #bdbdbd;
 }
@@ -66,7 +70,7 @@ body {
 
 .nav-item {
   flex: 1;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .nav-link {
@@ -85,15 +89,16 @@ body {
   position: relative;
   width: 80px;
   height: 80px;
+  top: 100px;
 }
 
 .lds-ellipsis div {
   position: absolute;
   top: 33px;
-  width: 13px;
-  height: 13px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: #fff;
+  background: #4c4c4c;
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 
@@ -148,3 +153,82 @@ body {
 }
 
 /* End loading spinner */
+
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+/* Input shake effect */
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25%,
+  75% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+.shake-input {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* End input shake effect */
+
+
+/* Google auth */
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #aeaeae;
+}
+/* End google auth */
+
+
+/* Post inputs */
+#transparentInput {
+  width: 100%; /* Ширина поля ввода */
+  padding: 10px; /* Внутренний отступ для контента внутри поля ввода */
+  border: none;
+  border-radius: 5px;
+  background-color: #f8f8f8; /* Прозрачный цвет фона */
+  outline: none; /* Убираем контур вокруг поля ввода при фокусе */
+}
+
+
+#transparentTextArea {
+  width: 100%; /* Ширина поля ввода */
+  padding: 10px; /* Внутренний отступ для контента внутри поля ввода */
+  border: none;
+  border-radius: 5px;
+  background-color: #ffffff; /* Прозрачный цвет фона */
+  outline: none; /* Убираем контур вокруг поля ввода при фокусе */
+  resize: auto;
+}
+/* End post inputs */
+
+
+/* User settings */
+.gutters-sm {
+    margin-right: -8px;
+    margin-left: -8px;
+}
+
+.gutters-sm>.col, .gutters-sm>[class*=col-] {
+    padding-right: 8px;
+    padding-left: 8px;
+}
+/* /User settings */

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api, {apiSetHeader} from './Api';
 
 const useAuth = () => {
     const [token, setToken] = useState(localStorage.getItem('token'));
@@ -10,8 +10,6 @@ const useAuth = () => {
     const navigate = useNavigate();
 
     const signup = async (userData) => {
-        console.log(userData);
-
         setLoading(true);
         try {
             const config = {
@@ -20,26 +18,76 @@ const useAuth = () => {
                 },
             };
 
-            const response = await axios.post('http://localhost:8000/auth/register', userData, config);
+            const response = await api.post('/auth/register', userData, config);
 
-            if (response.status == 201) {
+            if (response.status === 201) {
                 navigate('/login');
             } else {
                 setError('Signup failed');
             }
         } catch (error) {
-            console.log(error.response.data.detail[0].msg)
+            if (error.response) {
+                if (error.response.status === 400) {
+                    setError('This user is already exists');
+                }
+                else if (error.response.status === 422) {
+                    setError(error.response.data.detail[0].msg);
+                }
+            }
 
-            if (error.response.status == 400) {
-                setError('This user already exists');
-            }
-            else if (error.response.status == 422) {
-                setError(error.response.data.detail[0].msg); 
-            }
             else {
                 setError('An error occurred');
             }
+
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const verify = async (userData) => {
+        setLoading(true);
+        try {
+            const params = {
+                'first_name': userData.first_name,
+                'email': userData.email,
+            };
+
+            await api.post('/users/signup/verify', null, {
+                params,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            localStorage.setItem('user', JSON.stringify(userData));      
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const checkVerifyCode = async (code) => {
+        setLoading(true);
+        try {
+            const currentUser = JSON.parse(localStorage.getItem('user'));
+            const params = {
+                'email': currentUser.email,
+                'code': code,
+            };
+
+            const response = await api.post('/users/signup/verify/check', null, {
+                params,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (response.status === 200) {
+                await signup(currentUser)
+                return true;
+            }
             
+        } catch (error) {
+            if (error.response.status === 401) {
+                setError("The validation code you entered is incorrect. Please double-check and try again.");
+            }
         } finally {
             setLoading(false);
         }
@@ -47,7 +95,7 @@ const useAuth = () => {
 
     const login = async (params) => {
         setLoading(true);
-        
+
         try {
             const config = {
                 headers: {
@@ -55,21 +103,22 @@ const useAuth = () => {
                 },
             };
 
-            const response = await axios.post('http://localhost:8000/auth/jwt/login', params, config);
-            
-            if (response.status == 200) {
-                setToken(response.token);
-                localStorage.setItem('token', response.token);
+            const response = await api.post('/auth/jwt/login', params, config);
+            if (response.status === 200) {
+                apiSetHeader('Authorization', `Bearer ${response.data.access_token}`)
+                setToken(response.data.access_token);
+                localStorage.setItem('token', response.data.access_token);
+
                 navigate('/');
             }
 
         } catch (error) {
-            if (error.response.status == 400) {
-                setError('Invalid credentials'); 
+            if (error.response.status === 400) {
+                setError('Invalid credentials');
             }
             else {
                 console.error('Login error:', error.response);
-                setError('An error occurred');                
+                setError('An error occurred');
             }
 
         } finally {
@@ -79,15 +128,31 @@ const useAuth = () => {
 
     const logout = () => {
         localStorage.removeItem('token');
-        localStorage.removeItem('user'); // Clear user data if stored
         setToken(null);
         setUser(null);
         // Redirect to login or home page
-        navigate('/login')
+        navigate('/auth/login')
     };
 
 
-    return { token, user, loading, error, signup, login, logout };
+    const refreshUserData = () => {
+		api.get('/users/me')
+			.then((response) => {
+				localStorage.setItem('activeUser', JSON.stringify(response.data));
+                return response.data;
+			})
+			.catch((error) => {
+				if (error.response) {
+					if (error.response.status === 401) {
+						localStorage.removeItem("token")
+					}
+				}
+
+			});
+	};
+
+
+    return { token, user, loading, error, signup, login, logout, verify, checkVerifyCode, setError, refreshUserData };
 };
 
 export default useAuth;

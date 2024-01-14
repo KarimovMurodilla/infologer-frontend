@@ -5,7 +5,7 @@ import Knows from "./Knows";
 const Home = () => {
     return (
         <div>
-            <Knows />
+            <Knows showAll={true} />
         </div>
     )
 }

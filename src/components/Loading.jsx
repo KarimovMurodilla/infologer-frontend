@@ -1,10 +1,10 @@
-const LoadingSpinner = (bg_color=null) => {
+const LoadingSpinner = () => {
     return (
         <div className="lds-ellipsis">
-            <div className={bg_color}></div>
-            <div className={bg_color}></div>
-            <div className={bg_color}></div>
-            <div className={bg_color}></div>
+            <div className="mt-5 fs-1"></div>
+            <div className="mt-5 fs-1"></div>
+            <div className="mt-5 fs-1"></div>
+            <div className="mt-5 fs-1"></div>
         </div>
     )
 }

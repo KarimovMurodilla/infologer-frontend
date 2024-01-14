@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../auth/Api";
 
 
 const Tasks = () => {
     const [tasks, setTasks] = useState([])
 
     useEffect(() => {
-        const baseUrl = 'http://localhost:8000/tasks';
-
-        axios.get(baseUrl)
+        api.get('/tasks')
             .then((res) => {
                 setTasks(res.data);
             })
