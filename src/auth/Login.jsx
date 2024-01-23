@@ -52,15 +52,29 @@ const Login = () => {
 
                         <form>
                             <div className="form-floating mb-3">
-                                <input type="email" className={error ? 'form-control is-invalid' : 'form-control'} id="floatingInput" placeholder="name@example.com" onChange={(e) => setUsername(e.target.value)} required />
-                                <label htmlFor="floatingInput">Email address</label>
+                                <input 
+                                    type="email" 
+                                    className={error ? 'form-control is-invalid' : 'form-control'} 
+                                    id="floatingInput" 
+                                    placeholder="name@example.com" 
+                                    onChange={(e) => setUsername(e.target.value)} 
+                                    required 
+                                />
+                                <label htmlFor="floatingInput" className='text-secondary'>Email address</label>
                                 <div className="invalid-feedback">
                                     {error ? error : ''}
                                 </div>
                             </div>
                             <div className="form-floating mb-3">
-                                <input type="password" className={error ? 'form-control is-invalid' : 'form-control'} id="floatingPassword" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
-                                <label htmlFor="floatingPassword">Password</label>
+                                <input 
+                                    type="password" 
+                                    className={error ? 'form-control is-invalid' : 'form-control'} 
+                                    id="floatingPassword" 
+                                    placeholder="Password" 
+                                    onChange={(e) => setPassword(e.target.value)} 
+                                    required 
+                                />
+                                <label htmlFor="floatingPassword" className='text-secondary'>Password</label>
                                 <div className="invalid-feedback">
                                     {error ? error : ''}
                                 </div>

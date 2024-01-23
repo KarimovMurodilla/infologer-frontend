@@ -1,6 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import { GoTasklist } from "react-icons/go";
+import { MdLightbulbOutline, MdOutlineAccountCircle } from "react-icons/md";
+import { AiOutlineHome, AiOutlineSearch } from "react-icons/ai";
 
 const Header = () => {
     return (
@@ -11,27 +14,27 @@ const Header = () => {
                         <div className="d-flex justify-content-between align-items-center">
                             <div className="nav-icon">
                                 <Link to="/">
-                                    <i className="fa fa-house fa-2x" title="Home"></i>
+                                    <AiOutlineHome className="fs-2" />
                                 </Link>
                             </div>
                             <div className="nav-icon">
                                 <Link to="/search">
-                                    <i className="fa fa-magnifying-glass fa-2x" title="Search"></i>
+                                    <AiOutlineSearch className="fs-2" />
                                 </Link>
                             </div>
                             <div className="nav-icon">
                                 <Link to="/tasks">
-                                    <i className="fa fa-diagram-next fa-2x" title="Tasks"></i>
+                                    <GoTasklist className="fs-2" />
                                 </Link>
                             </div>
                             <div className="nav-icon">
                                 <Link to="/knows">
-                                    <i className="fa fa-lightbulb fa-2x" title="Knows"></i>
+                                    <MdLightbulbOutline className="fs-2" />
                                 </Link>
                             </div>
                             <div className="nav-icon">
                                 <Link to="/you">
-                                    <i className="fa fa-circle-user fa-2x" title="You"></i>
+                                    <MdOutlineAccountCircle className="fs-2" />
                                 </Link>
                             </div>
                         </div>

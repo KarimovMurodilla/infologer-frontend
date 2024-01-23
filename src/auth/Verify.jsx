@@ -40,6 +40,7 @@ const VerifyEmail = () => {
 
         if (resp) {
             navigate('/auth/login');
+            localStorage.removeItem('email_4_validate');
         }
     }
 

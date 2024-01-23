@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
-import Tasks from "./pages/Tasks";
-import Knows from "./pages/Knows";
+import TasksPage from "./pages/Tasks";
+import KnowsPage from "./pages/Knows";
 import You from "./pages/You";
 import UserSettings from "./pages/Settings";
 
@@ -45,9 +45,9 @@ function App() {
 			<Routes>
 				<Route exact path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
 				<Route exact path="/search" element={<PrivateRoute><Search /></PrivateRoute>} />
-				<Route exact path="/tasks" element={<PrivateRoute><Tasks /></PrivateRoute>} />
-				<Route exact path="/knows" element={<PrivateRoute><Knows /></PrivateRoute>} />
-				<Route exact path="/you" element={<PrivateRoute><You /></PrivateRoute>} />
+				<Route exact path="/tasks" element={<PrivateRoute><TasksPage /></PrivateRoute>} />
+				<Route exact path="/knows" element={<PrivateRoute><KnowsPage /></PrivateRoute>} />
+				<Route exact path="/:username" element={<PrivateRoute><You /></PrivateRoute>} />
 				<Route exact path="/settings" element={<PrivateRoute><UserSettings /></PrivateRoute>} />
 			</Routes>
 			<Routes>

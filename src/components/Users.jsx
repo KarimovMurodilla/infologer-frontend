@@ -3,22 +3,17 @@ import User from "./User";
 
 
 const Users = ({ users }) => {
-    if (users.length > 0)
-        return (
-            <div className="list-group">
+    return (
+        <div class="card">
+            <ul className="list-group list-group-flush">
                 {
                     users.map((user) => (
                         <User key={user.id} user={user} />
                     ))
                 }
-            </div>
-        )
-    else
-        return (
-            <div className="list-group">
-                <h3 className="text-center">No users</h3>
-            </div>
-        )
+            </ul>
+        </div>
+    )
 }
 
 

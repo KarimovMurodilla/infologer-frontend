@@ -1,9 +1,9 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 const JWTToken = localStorage.getItem('token');
 const api = axios.create({
-    baseURL: 'http://localhost:8000'
+    baseURL: 'https://72db-37-110-214-39.ngrok-free.app/'
 });
 
 
@@ -13,14 +13,17 @@ export const apiSetHeader = (name, value) => {
     }
 };
 
+apiSetHeader('ngrok-skip-browser-warning', 'sim sim open');
+
 if (JWTToken) {
-    apiSetHeader('Authorization', `Bearer ${JWTToken}`)
+    apiSetHeader('Authorization', `Bearer ${JWTToken}`);
 }
 
 
 api.interceptors.request.use(config => {
     if (!config.headers['Authorization']) {
         console.log("Not auth")
+        {<Navigate to="/auth/login" replace />}
     }
 
     return config;
@@ -35,6 +38,7 @@ api.interceptors.response.use(response => {
     if (error.response && error.response.status === 401) {
       // Token expired, redmove from local storage
       localStorage.removeItem("token");
+      {<Navigate to="/auth/login" replace />}
     }
     return Promise.reject(error);
   });

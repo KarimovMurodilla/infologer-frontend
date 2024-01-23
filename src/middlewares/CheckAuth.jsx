@@ -1,13 +1,24 @@
 import { useEffect } from "react";
 
-import useAuth from "../auth/useAuth";
+import api from "../auth/Api";
+import { Navigate } from "react-router-dom";
 
 
 const CheckAuth = () => {
-	const { refreshUserData } = useAuth();
-
 	useEffect(() => {
-		refreshUserData();
+		const getMyData = async () => {
+			try {
+				const response = await api.get('/fastapi_users/me');
+				localStorage.setItem('activeUser', JSON.stringify(response.data));
+				return response.data;
+			} catch (error) {
+				if (error.response && error.response.status === 401) {
+					localStorage.clear();
+					<Navigate to="/auth/login" replace />
+				}
+			}			
+		}
+		getMyData()
 	}, []);
 };
 

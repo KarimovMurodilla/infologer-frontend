@@ -7,9 +7,11 @@ import { IoIosCheckmarkCircle } from "react-icons/io";
 
 import api from "../auth/Api";
 import useAuth from "../auth/useAuth";
+import LoadingButton from "../components/Button";
 
 
 const UserSettings = () => {
+    // -------------------Profile info-------------------
     const [activeTab, setActiveTab] = useState("profile");
     const [profileError, setProfileError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -21,6 +23,7 @@ const UserSettings = () => {
         username: '',
         about: ''
     });
+
     const navigate = useNavigate();
     const btnStatus = !(userData.first_name.length > 0 && userData.first_name.length <= 25) || !(userData.last_name.length > 0 && userData.last_name.length <= 25);
 
@@ -31,7 +34,7 @@ const UserSettings = () => {
     }, []);
 
     const resetData = () => {
-        api.get('/users/me')
+        api.get('/fastapi_users/me')
             .then((response) => {
                 setUserData({
                     ...userData,
@@ -40,8 +43,17 @@ const UserSettings = () => {
                     username: response.data.username,
                     about: response.data.about,
                 });
+
+                setSecurityData({
+                    ...securityData,
+                    is_knows_private: response.data.is_knows_private,
+                    is_tasks_private: response.data.is_tasks_private,
+                });
+
                 setCurUser(response.data);
                 localStorage.setItem("activeUser", JSON.stringify(response.data))
+
+                console.log(response.data)
             })
             .catch((error) => {
                 if (error.response) {
@@ -54,21 +66,16 @@ const UserSettings = () => {
             });
     };
 
-    const handleTabChange = (tab) => {
-        setActiveTab(tab);
-    };
-
     const handleProfileInfo = async () => {
         setLoading(true);
         const result = await validateUsername(userData.username);
 
-        const headers = {
-            'accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-
         if (result) {
             try {
+                const headers = {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
                 const resp = await api.patch('/fastapi_users/me',
                     userData,
                     { headers }
@@ -108,6 +115,36 @@ const UserSettings = () => {
 
     const handleClose = () => {
         setBtnClicked(false);
+        setBtnClicked2(false);
+    }
+
+
+    // -------------------Security-------------------
+    const [btnClicked2, setBtnClicked2] = useState(false);
+    const [securityData, setSecurityData] = useState({
+        is_knows_private: false,
+        is_tasks_private: false
+    });
+
+    const handleSecurityData = async () => {
+        try {
+            setLoading(true);
+
+            const headers = {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+            const resp = await api.patch('/fastapi_users/me',
+                securityData,
+                { headers }
+            )
+
+            setBtnClicked2(true);
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -125,7 +162,7 @@ const UserSettings = () => {
                                 <a
                                     type="button"
                                     className={`nav-item nav-link ${activeTab === "profile" ? "active" : ""}`}
-                                    onClick={() => handleTabChange("profile")}
+                                    onClick={() => setActiveTab("profile")}
                                 >
                                     <FiUser className="fs-4" />
                                     <p className="d-inline ms-1">Profile Information</p>
@@ -133,7 +170,7 @@ const UserSettings = () => {
                                 <a
                                     type="button"
                                     className={`nav-item nav-link ${activeTab === "account" ? "active" : ""}`}
-                                    onClick={() => handleTabChange("account")}
+                                    onClick={() => setActiveTab("account")}
                                 >
                                     <FiSettings className="fs-4" />
                                     <p className="d-inline ms-1">Account Settings</p>
@@ -141,7 +178,7 @@ const UserSettings = () => {
                                 <a
                                     type="button"
                                     className={`nav-item nav-link ${activeTab === "security" ? "active" : ""}`}
-                                    onClick={() => handleTabChange("security")}
+                                    onClick={() => setActiveTab("security")}
                                 >
                                     <FiShield className="fs-4" />
                                     <p className="d-inline ms-1">Security</p>
@@ -158,7 +195,7 @@ const UserSettings = () => {
                                     <a
                                         type="button"
                                         className={`nav-link has-icon ${activeTab === "profile" ? "active" : ""}`}
-                                        onClick={() => handleTabChange("profile")}
+                                        onClick={() => setActiveTab("profile")}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                                     </a>
@@ -167,7 +204,7 @@ const UserSettings = () => {
                                     <a
                                         type="button"
                                         className={`nav-link has-icon ${activeTab === "account" ? "active" : ""}`}
-                                        onClick={() => handleTabChange("account")}
+                                        onClick={() => setActiveTab("account")}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                                     </a>
@@ -176,7 +213,7 @@ const UserSettings = () => {
                                     <a
                                         type="button"
                                         className={`nav-link has-icon ${activeTab === "security" ? "active" : ""}`}
-                                        onClick={() => handleTabChange("security")}
+                                        onClick={() => setActiveTab("security")}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-shield"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                                     </a>
@@ -188,19 +225,19 @@ const UserSettings = () => {
                         <div className="card-body tab-content">
                             {activeTab === "profile" && (
                                 <div className="tab-pane active" id="profile">
-                                    {   
-                                        btnClicked && !profileError && activeTab === "profile" ?
-                                        (<div class="alert alert-success alert-dismissible" role="alert">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel"><IoIosCheckmarkCircle className="fs-3 text-success" /> Your changes is saved</h1>
-                                            <button type="button" class="btn-close" onClick={handleClose}></button>
-                                        </div>)
-                                        : ""
-                                    }                                    
+                                    {
+                                        btnClicked && !profileError && !loading && activeTab === "profile" ?
+                                            (<div className="alert alert-success alert-dismissible" role="alert">
+                                                <h1 className="modal-title fs-5" id="exampleModalLabel"><IoIosCheckmarkCircle className="fs-3 text-success" /> Your changes is saved</h1>
+                                                <button type="button" className="btn-close" onClick={handleClose}></button>
+                                            </div>)
+                                            : ""
+                                    }
                                     <h6>YOUR PROFILE INFORMATION</h6>
                                     <hr />
                                     <form>
                                         <div className="form-group mb-3">
-                                            <label htmlFor="firstName">First Name</label>
+                                            <label htmlFor="firstName" className="text-secondary">First Name</label>
                                             <input
                                                 type="text"
                                                 className="form-control"
@@ -216,7 +253,7 @@ const UserSettings = () => {
                                             </div>
                                         </div>
                                         <div className="form-group mb-3">
-                                            <label htmlFor="lastName">Last Name</label>
+                                            <label htmlFor="lastName" className="text-secondary">Last Name</label>
                                             <input
                                                 type="text"
                                                 className="form-control"
@@ -232,7 +269,7 @@ const UserSettings = () => {
                                             </div>
                                         </div>
                                         <div className="form-group mb-3">
-                                            <label htmlFor="username">Username</label>
+                                            <label htmlFor="username" className="text-secondary">Username</label>
                                             <div className="input-group flex-nowrap mb-1">
                                                 <span className="input-group-text" id="addon-wrapping">@</span>
                                                 <input
@@ -240,7 +277,7 @@ const UserSettings = () => {
                                                     className="form-control"
                                                     id="username" placeholder="Username"
                                                     value={userData.username}
-                                                    onInput={(e) => setUserData({ ...userData, ['username']: e.target.value })}
+                                                    onChange={(e) => setUserData({ ...userData, ['username']: e.target.value })}
                                                 />
                                             </div>
                                             <div className="text-danger">
@@ -255,7 +292,7 @@ const UserSettings = () => {
                                             </small>
                                         </div>
                                         <div className="form-group mb-3">
-                                            <label htmlFor="bio">Your Bio</label>
+                                            <label htmlFor="bio" className="text-secondary">Your Bio</label>
                                             <textarea
                                                 className="form-control autosize"
                                                 id="bio"
@@ -272,7 +309,7 @@ const UserSettings = () => {
                                             onClick={handleProfileInfo}
                                             disabled={btnStatus}
                                         >
-                                            Save Changes
+                                            <LoadingButton name="Save Changes" is_loading={loading} />
                                         </button>
                                         <button
                                             type="reset"
@@ -290,7 +327,7 @@ const UserSettings = () => {
                                     <hr />
                                     <form>
                                         <div className="form-group">
-                                            <label htmlFor="username">Email</label>
+                                            <label className="text-secondary">Email</label>
                                             <input type="text" className="form-control" id="username" aria-describedby="usernameHelp" value={currentUser.email} disabled />
                                             <small id="usernameHelp" className="form-text text-muted">Your current email authentication.</small>
                                         </div>
@@ -305,22 +342,62 @@ const UserSettings = () => {
                             )}
                             {activeTab === "security" && (
                                 <div>
+                                    {
+                                        btnClicked2 && !loading && activeTab === "security" ?
+                                            (<div className="alert alert-success alert-dismissible" role="alert">
+                                                <h1 className="modal-title fs-5" id="exampleModalLabel"><IoIosCheckmarkCircle className="fs-3 text-success" /> Your changes is saved</h1>
+                                                <button type="button" className="btn-close" onClick={handleClose}></button>
+                                            </div>)
+                                            : ""
+                                    }
                                     <h6>SECURITY SETTINGS</h6>
                                     <hr />
                                     <form>
-                                        <div className="form-group">
-                                            <label className="d-block">Change Password</label>
-                                            <input type="text" className="form-control" placeholder="Enter your old password" />
-                                            <input type="text" className="form-control mt-1" placeholder="New password" />
-                                            <input type="text" className="form-control mt-1" placeholder="Confirm new password" />
+                                        <div className="form-group mb-4">
+                                            <label className="d-block text-secondary mb-2">Change your posts visibility</label>
+                                            <div className="fs-5">
+                                                <div className="card" >
+                                                    <ul className="list-group list-group-flush">
+                                                        <li className="list-group-item">
+                                                            <div className="form-check form-switch p-0">
+                                                                <div className="d-flex flex-row-reverse justify-content-between align-items-center">
+                                                                    <input
+                                                                        className="form-check-input"
+                                                                        type="checkbox"
+                                                                        role="switch"
+                                                                        id="switchCheckLabelStart1"
+                                                                        checked={securityData.is_knows_private}
+                                                                        onChange={(e) => setSecurityData({ ...securityData, ['is_knows_private']: e.target.checked })}
+                                                                    />
+                                                                    <label className="form-check-label" htmlFor="switchCheckLabelStart1">Make knows private</label>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li className="list-group-item">
+                                                            <div className="form-check form-switch p-0">
+                                                                <div className="d-flex flex-row-reverse justify-content-between align-items-center">
+                                                                    <input
+                                                                        className="form-check-input"
+                                                                        type="checkbox"
+                                                                        role="switch"
+                                                                        id="switchCheckLabelStart2"
+                                                                        checked={securityData.is_tasks_private}
+                                                                        onChange={(e) => setSecurityData({ ...securityData, ['is_tasks_private']: e.target.checked })}
+                                                                    />
+                                                                    <label className="form-check-label" htmlFor="switchCheckLabelStart2">Make tasks private</label>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                         <button
                                             type="button"
                                             className="btn btn-primary me-1"
-                                            onClick={handleProfileInfo}
-                                            disabled={btnStatus}
+                                            onClick={handleSecurityData}
                                         >
-                                            Save Changes
+                                            <LoadingButton name="Save Changes" is_loading={loading} />
                                         </button>
                                     </form>
                                 </div>

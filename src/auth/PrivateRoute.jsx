@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import useAuth from './useAuth';
 
 const ProtectedRoute = ({ children }) => {
-	const { token } = useAuth();
+	const token = localStorage.getItem("token")
 
 	return token ? children : <Navigate to="/auth/login" replace />;
 };

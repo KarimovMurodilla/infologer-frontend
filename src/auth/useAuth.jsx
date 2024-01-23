@@ -21,7 +21,7 @@ const useAuth = () => {
             const response = await api.post('/auth/register', userData, config);
 
             if (response.status === 201) {
-                navigate('/login');
+                return true;
             } else {
                 setError('Signup failed');
             }
@@ -109,15 +109,19 @@ const useAuth = () => {
                 setToken(response.data.access_token);
                 localStorage.setItem('token', response.data.access_token);
 
+                const responseMe = await api.get('/fastapi_users/me');
+
+				localStorage.setItem('activeUser', JSON.stringify(responseMe.data));
+
                 navigate('/');
             }
 
         } catch (error) {
-            if (error.response.status === 400) {
+            if (error.response && error.response.status === 400) {
                 setError('Invalid credentials');
             }
             else {
-                console.error('Login error:', error.response);
+                console.error('Login error:', error);
                 setError('An error occurred');
             }
 
@@ -127,7 +131,7 @@ const useAuth = () => {
     };
 
     const logout = () => {
-        localStorage.removeItem('token');
+        localStorage.clear();
         setToken(null);
         setUser(null);
         // Redirect to login or home page
@@ -135,24 +139,7 @@ const useAuth = () => {
     };
 
 
-    const refreshUserData = () => {
-		api.get('/users/me')
-			.then((response) => {
-				localStorage.setItem('activeUser', JSON.stringify(response.data));
-                return response.data;
-			})
-			.catch((error) => {
-				if (error.response) {
-					if (error.response.status === 401) {
-						localStorage.removeItem("token")
-					}
-				}
-
-			});
-	};
-
-
-    return { token, user, loading, error, signup, login, logout, verify, checkVerifyCode, setError, refreshUserData };
+    return { token, user, loading, error, signup, login, logout, verify, checkVerifyCode, setError };
 };
 
 export default useAuth;

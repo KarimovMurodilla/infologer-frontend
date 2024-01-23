@@ -209,7 +209,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 
-#transparentTextArea {
+.transparentTextArea {
   width: 100%; /* Ширина поля ввода */
   padding: 10px; /* Внутренний отступ для контента внутри поля ввода */
   border: none;
@@ -232,3 +232,16 @@ input[type=number]::-webkit-outer-spin-button {
     padding-left: 8px;
 }
 /* /User settings */
+
+
+/* Switch buttons */
+.custom-switch-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.custom-switch-label {
+    margin-right: 10px; /* Adjust the margin as needed */
+}
+/* / Switch buttons */
