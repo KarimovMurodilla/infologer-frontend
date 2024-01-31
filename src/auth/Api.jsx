@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 
 const JWTToken = localStorage.getItem('token');
 const api = axios.create({
-    baseURL: 'https://72db-37-110-214-39.ngrok-free.app/'
+    baseURL: 'http://localhost:8000'
 });
 
 
@@ -23,11 +23,14 @@ if (JWTToken) {
 api.interceptors.request.use(config => {
     if (!config.headers['Authorization']) {
         console.log("Not auth")
-        {<Navigate to="/auth/login" replace />}
+        // return <Navigate to="/auth/login" replace />;
     }
 
     return config;
 }, error => {
+    // if (error.response.status === 401) {
+    //    return <Navigate to="/auth/login" replace />; 
+    // }
     return Promise.reject(error);
 });
 

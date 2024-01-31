@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { IoMdSettings } from "react-icons/io";
+import { IoEyeOffOutline } from "react-icons/io5";
 
 import api from "../auth/Api";
 import getMe from "../auth/GetMe";
 import TasksPage from "./Tasks";
 import KnowsPage from "./Knows";
+import { OtherUserKnows, OtherUserTasks } from "../components/OtherUserData";
+
 
 const You = () => {
+    const me = getMe();
+
     const [user, setUser] = useState("");
-    const { username } = useParams();
     const [activeTab, setActiveTab] = useState("knows");
     const [isLoading, setIsLoading] = useState(true);
-
+    
+    const { username } = useParams();
     const navigate = useNavigate();
 
     const getUserData = async () => {
-        if (username === 'you') {
-            const userData = await getMe();
-            setUser(userData);
+        
+        if (me.username === username) {
+            setUser(me);
             setIsLoading(false);
 
         } else {
@@ -31,6 +36,9 @@ const You = () => {
                 }
                 const response = await api.get('/users/get_by_username', { params, headers });
                 const userData = response.data.detail;
+                if (!userData) {
+                    navigate('/404')
+                }
                 setUser(userData);
             } catch (error) {
                 if (error.response && error.response.status === 401) {
@@ -48,14 +56,14 @@ const You = () => {
     }, [username]);
 
     return (
-        <div className="container mt-4 shadow p-3 mb-5 bg-body-tertiary rounded">
+        <div className="container">
             <div className="row justify-content-center">
                 <div className="d-flex justify-content-between">
-                    <div className="shadow p-3 mb-5 bg-body-tertiary rounded">
-                        <h4>{user.first_name}</h4>
-                        <h4>{user.last_name}</h4>
+                    <div className="p-3 mb-5 rounded">
+                        <p className="text-decoration-underline fs-2">{user.first_name}</p>
+                        <p className="text-decoration-underline fs-2">{user.last_name}</p>
                         <hr />
-                        <p>@{user.username}</p>
+                        <p className="font-monospace fs-3">@{user.username}</p>
                     </div>
 
                     <div>
@@ -67,7 +75,7 @@ const You = () => {
 
                     <div>
                         {
-                            username === 'you' &&
+                            me.username === username &&
                             <Link to="/settings" type="button" className="btn">
                                 <IoMdSettings className="fs-2" />
                             </Link>
@@ -100,13 +108,19 @@ const You = () => {
                         <div className="tab-content mt-5">
                             <div className={`tab-pane fade ${activeTab === "knows" ? "show active" : ""}`}>
                                 {
-                                    (!isLoading && username !== 'you') ? <KnowsPage showCompleted={true} userId={user.id} />
-                                        : <KnowsPage showCompleted={true} />
+                                    (!isLoading && me.username !== username) ? 
+                                        user.is_knows_private 
+                                        ? <p className="text-center"><IoEyeOffOutline className="fs-1" /> Private data</p>
+                                        : <OtherUserKnows userId={user.id} />
+                                        : <KnowsPage />
                                 }
                             </div>
                             <div className={`tab-pane fade ${activeTab === "tasks" ? "show active" : ""}`}>
                                 {
-                                    (!isLoading && username !== 'you') ? <TasksPage showCompleted={true} userId={user.id} />
+                                    (!isLoading && me.username !== username) ? 
+                                        user.is_tasks_private 
+                                        ? <p className="text-center"><IoEyeOffOutline className="fs-1" /> Private data</p>
+                                        : <OtherUserTasks userId={user.id} />
                                         : <TasksPage showCompleted={true} />
                                 }
                             </div>

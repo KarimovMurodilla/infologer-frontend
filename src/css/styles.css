@@ -1,4 +1,3 @@
-/* Дополнительные стили можно добавить сюда */
 
 /* * {
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -21,10 +20,12 @@ body {
 }
 
 .container {
-  background-color: #e8e8e8;
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #4c4c4c;
+  border-top: none;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
 }
 
 .color-red {
@@ -34,7 +35,7 @@ body {
 .card {
   border: none;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
 }
 
 .card-title {
@@ -56,6 +57,10 @@ body {
 .comment-button i,
 .like-button i {
   font-size: 1.5rem;
+}
+
+.pre-line {
+  white-space: pre-line;
 }
 
 /* Нижняя навигационная панель */
@@ -80,6 +85,10 @@ body {
 .nav-icon a {
   text-decoration: none;
   color: inherit;
+}
+
+.nav-border-top {
+  border-top: 2px solid #4c4c4c;
 }
 
 
@@ -245,3 +254,25 @@ input[type=number]::-webkit-outer-spin-button {
     margin-right: 10px; /* Adjust the margin as needed */
 }
 /* / Switch buttons */
+
+/* Light */
+@keyframes lightPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+  }
+}
+
+.lightbulb {
+  border-radius: 50%;
+  animation: lightPulse 2s;
+}
+/* /Light */

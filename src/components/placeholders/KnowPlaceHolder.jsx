@@ -3,7 +3,7 @@ import React from 'react';
 const KnowPlaceHolder = () => {
     return (
         <div className="col-md-8">
-            <div className="card mb-3">
+            <div className="card border-secondary mb-3">
                 <div className="card-header">
                     <p className="card-text placeholder-glow">
                         <span className="placeholder col-3"></span>
@@ -36,8 +36,8 @@ const KnowPlaceHolder = () => {
 }
 
 
-const getManyPlaceHolders = () => {
-    const repetitions = 10;
+const getManyPlaceHolders = (count) => {
+    const repetitions = count;
     const elements = [];
 
     // Используем forEach для повторения нужное количество раз

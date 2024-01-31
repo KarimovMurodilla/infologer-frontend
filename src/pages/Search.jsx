@@ -30,7 +30,7 @@ const Search = () => {
     }
 
     return (
-        <div className="container mt-4">
+        <div className="container">
             <div className="input-group mb-5">
                 {/* <span className="input-group-text" id="basic-addon1">@</span> */}
                 <input type="text" onChange={(event) => setUsername(event.target.value)} className="form-control" placeholder="Search..." aria-label="Username" aria-describedby="basic-addon2" />

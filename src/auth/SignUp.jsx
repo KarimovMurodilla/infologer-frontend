@@ -80,7 +80,7 @@ const Signup = () => {
     }
 
     return (
-        <div className='container mt-5 mb-5'>
+        <div className='container mb-5'>
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-6 offset-md-3">

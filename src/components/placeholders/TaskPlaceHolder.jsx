@@ -26,8 +26,8 @@ const TaskPlaceHolder = () => {
 }
 
 
-const getManyPlaceHolders = () => {
-    const repetitions = 5;
+const getManyPlaceHolders = ( count ) => {
+    const repetitions = count;
     const elements = [];
 
     // Используем forEach для повторения нужное количество раз

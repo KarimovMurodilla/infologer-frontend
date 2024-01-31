@@ -52,8 +52,6 @@ const UserSettings = () => {
 
                 setCurUser(response.data);
                 localStorage.setItem("activeUser", JSON.stringify(response.data))
-
-                console.log(response.data)
             })
             .catch((error) => {
                 if (error.response) {
@@ -103,6 +101,7 @@ const UserSettings = () => {
 
             if (resp.data.detail && currentUser.username !== username) {
                 setProfileError("This username is already taken.");
+                setLoading(false);
             } else {
                 setProfileError(null);
                 return true;
@@ -110,6 +109,7 @@ const UserSettings = () => {
 
         } else {
             setProfileError("Invalid username. Please use only letters, numbers, and underscores, with a minimum length of 4 characters.");
+            setLoading(false);
         }
     }
 
@@ -148,7 +148,7 @@ const UserSettings = () => {
     }
 
     return (
-        <div className="container mt-3 mb-5">
+        <div className="container mb-5">
             <nav aria-label="breadcrumb" className="main-breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item active" aria-current="page">Profile Settings</li>

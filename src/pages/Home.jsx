@@ -1,11 +1,11 @@
 import React from "react";
-import Knows from "./Knows";
+import HomeData from "../components/HomeData";
 
 
 const Home = () => {
     return (
         <div>
-            <Knows showAll={true} />
+            <HomeData />
         </div>
     )
 }

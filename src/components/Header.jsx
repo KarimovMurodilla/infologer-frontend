@@ -1,18 +1,22 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 import { GoTasklist } from "react-icons/go";
 import { MdLightbulbOutline, MdOutlineAccountCircle } from "react-icons/md";
 import { AiOutlineHome, AiOutlineSearch } from "react-icons/ai";
 
+import getMe from "../auth/GetMe";
+
+
 const Header = () => {
+    const me = getMe();
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-bottom d-lg-none">
                 <div className="container-fluid">
                     <ul className="navbar-nav w-100">
                         <div className="d-flex justify-content-between align-items-center">
-                            <div className="nav-icon">
+                            <div className="nav-icon nav-border-top">
                                 <Link to="/">
                                     <AiOutlineHome className="fs-2" />
                                 </Link>
@@ -33,7 +37,7 @@ const Header = () => {
                                 </Link>
                             </div>
                             <div className="nav-icon">
-                                <Link to="/you">
+                                <Link to={`/${me && me.username}`}>
                                     <MdOutlineAccountCircle className="fs-2" />
                                 </Link>
                             </div>
@@ -60,7 +64,7 @@ const Header = () => {
                                 <Link className="nav-link" to="/knows">Knows</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/you">You</Link>
+                                <Link className="nav-link" to={`/${me && me.username}`}>You</Link>
                             </li>
                         </ul>
                     </div>

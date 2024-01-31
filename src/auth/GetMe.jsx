@@ -1,6 +1,6 @@
 import api from "./Api";
 
-const getMe = async () => {
+const getMe = () => {
     const storedFormData = localStorage.getItem('activeUser');
     const myData = JSON.parse(storedFormData);
 

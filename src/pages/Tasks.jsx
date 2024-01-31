@@ -12,14 +12,26 @@ export const TasksContext = createContext();
 
 const TasksPage = ({ showCompleted, userId }) => {
     const [tasks, setTasks] = useState([]);
-    const [tasksIsLoading, setIsLoading] = useState(true); // Add loading state
+    const [tasksIsLoading, setIsLoading] = useState(true);
+    const [page, setPage] = useState(0);
+    const [isScrollLoading, setOnScrollLoading] = useState(true);
     const navigate = useNavigate();
 
-    const getData = async () => {
+    const getData = async ( refresh ) => {
+        console.log(page)
         try {
-            const urlTo = userId ? `/tasks/${userId}` : '/tasks';
-            const response = await api.get(urlTo);
-            setTasks(response.data);
+            if (refresh) {
+                const urlTo = `/tasks?page=0`;
+                const response = await api.get(urlTo);
+                setTasks(response.data);
+                setPage(1);                
+            } else {
+                const urlTo = `/tasks?page=${page}`;
+                const response = await api.get(urlTo);
+                setTasks((prevData) => [...prevData, ...response.data]);
+                setPage(prevPage => prevPage + 5);                
+            }
+
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 localStorage.clear();
@@ -28,14 +40,29 @@ const TasksPage = ({ showCompleted, userId }) => {
                 console.error("Error fetching user data:", error);
             }
         } finally {
-            setIsLoading(false); // Handle errors and stop loading
+            setIsLoading(false);
+            setOnScrollLoading(false);
         }
     }
 
-    // Fetch data when the component mounts
     useEffect(() => {
-        getData();
-    }, [userId]);
+        if (isScrollLoading) {
+            getData();
+        }
+    }, [isScrollLoading]);
+
+    useEffect(() => {
+        document.addEventListener('scroll', scrollHandler)
+        return function () {
+            document.removeEventListener('scroll', scrollHandler)
+        };
+    }, []);
+
+    const scrollHandler = (e) => {
+        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
+            setOnScrollLoading(true);
+        }
+    }
 
     return (
         showCompleted ?
@@ -43,14 +70,14 @@ const TasksPage = ({ showCompleted, userId }) => {
                 <ShowTasks showCompleted={showCompleted} />
             </TasksContext.Provider>
             :
-            <TasksContext.Provider value={{ tasks, getData, tasksIsLoading }}>
+            <TasksContext.Provider value={{ tasks, getData, isScrollLoading }}>
                 <Tasks />
             </TasksContext.Provider>
     );
 };
 
 const Tasks = () => {
-    const { getData } = useContext(TasksContext);
+    const { getData, isScrollLoading } = useContext(TasksContext);
     const [isLoading, setIsLoading] = useState(true); // Add loading state
     const [title, setTitle] = useState("");
 
@@ -70,7 +97,7 @@ const Tasks = () => {
                 { headers }
             );
             console.log(response);
-            await getData();
+            await getData(true);
             setTitle("");
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -85,7 +112,7 @@ const Tasks = () => {
     }
 
     return (
-        <div className="container mt-5 mb-5">
+        <div className="container mb-5">
             <div className="row mt-4 justify-content-center">
                 <div className="col-md-8">
                     <div className="d-grid gap-2">
@@ -128,8 +155,16 @@ const Tasks = () => {
                         </div>
                     </div>
                 </div>
+                <hr className="mt-5" />
+
             </div>
             <ShowTasks />
+            {
+                isScrollLoading &&
+                (<div className="row mt-4 mb-5 justify-content-center">
+                    {getManyPlaceHolders(1)}
+                </div>)
+            }
         </div>
     )
 }
@@ -142,7 +177,7 @@ const ShowTasks = ({ showCompleted }) => {
         <div>
             {tasksIsLoading ? (
                 <div className="row mt-4 mb-5 justify-content-center">
-                    {getManyPlaceHolders()}
+                    {getManyPlaceHolders(1)}
                 </div>
             ) : tasks.length > 0 ? (
                 <div>
@@ -153,7 +188,6 @@ const ShowTasks = ({ showCompleted }) => {
                             tasks
                                 .filter(task => task.status === false)
                                 .slice()
-                                .reverse()
                                 .map(task => <Task key={task.id} task={task} status={false} />)
                             }
                         </div>
@@ -168,7 +202,6 @@ const ShowTasks = ({ showCompleted }) => {
                                 tasks
                                     .filter(task => task.status === true)
                                     .slice()
-                                    .reverse()
                                     .map(task => <Task key={task.id} task={task} status={true} />)
                             }
                         </div>

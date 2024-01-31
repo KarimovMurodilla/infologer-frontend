@@ -7,6 +7,8 @@ import TasksPage from "./pages/Tasks";
 import KnowsPage from "./pages/Knows";
 import You from "./pages/You";
 import UserSettings from "./pages/Settings";
+import YourComponent from "./pages/TestPage";
+import Page404 from "./pages/404";
 
 import Login from "./auth/Login";
 import PrivateRoute from "./auth/PrivateRoute";
@@ -49,6 +51,8 @@ function App() {
 				<Route exact path="/knows" element={<PrivateRoute><KnowsPage /></PrivateRoute>} />
 				<Route exact path="/:username" element={<PrivateRoute><You /></PrivateRoute>} />
 				<Route exact path="/settings" element={<PrivateRoute><UserSettings /></PrivateRoute>} />
+				<Route exact path="/test" element={<PrivateRoute><YourComponent /></PrivateRoute>} />
+				<Route exact path="/404" element={<PrivateRoute><Page404 /></PrivateRoute>} />
 			</Routes>
 			<Routes>
 				<Route exact path="/auth/login" element={<Login />} />

@@ -26,8 +26,8 @@ const Task = ({ task, status }) => {
                 data,
                 { headers }
             );
-            console.log(response);
-            getData();
+            
+            await getData(true);
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -103,14 +103,10 @@ const Task = ({ task, status }) => {
                     </div>
                 </div>
 
-                <div className="card-body text-secondary">
-                    <textarea
-                        className="card-text transparentTextArea"
-                        placeholder="Describe the remarkable things you've achieved..."
-                        readOnly={true}
-                        value={task.description}
-                        style={{ resize: "none" }}
-                    />
+                <div className="card-body">
+                    <p className="card-text pre-line">
+                        {task.description}
+                    </p>
                 </div>
             </div>
         </div>
