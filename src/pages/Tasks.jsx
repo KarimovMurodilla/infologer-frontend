@@ -10,7 +10,7 @@ import getManyPlaceHolders from "../components/placeholders/TaskPlaceHolder";
 // Create a context
 export const TasksContext = createContext();
 
-const TasksPage = ({ showCompleted, userId }) => {
+const TasksPage = ({ showCompleted }) => {
     const [tasks, setTasks] = useState([]);
     const [tasksIsLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(0);
@@ -24,7 +24,7 @@ const TasksPage = ({ showCompleted, userId }) => {
                 const urlTo = `/tasks?page=0`;
                 const response = await api.get(urlTo);
                 setTasks(response.data);
-                setPage(1);                
+                setPage(5);                
             } else {
                 const urlTo = `/tasks?page=${page}`;
                 const response = await api.get(urlTo);
@@ -96,7 +96,6 @@ const Tasks = () => {
                 data,
                 { headers }
             );
-            console.log(response);
             await getData(true);
             setTitle("");
         } catch (error) {

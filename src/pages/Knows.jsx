@@ -22,7 +22,7 @@ const KnowsPage = () => {
                 const urlTo = `/knows?page=0`;
                 const response = await api.get(urlTo);
                 setKnows(response.data);
-                setPage(1);
+                setPage(5);
             } else {
                 const urlTo = `/knows?page=${page}`;
                 const response = await api.get(urlTo);
@@ -179,7 +179,7 @@ export const ShowKnows = ({ knows, knowsIsLoading }) => {
                 </div>
             ) : (
                 <div className="text-center">
-                    <h3>No data</h3>
+                    <p>No data</p>
                 </div>
             )}
         </div>

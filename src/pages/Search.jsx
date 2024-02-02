@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { AiOutlineSearch } from "react-icons/ai";
 
 import Users from "../components/Users";
+import api from "../auth/Api";
 
 const Search = () => {
     const [username, setUsername] = useState("");
@@ -11,10 +11,10 @@ const Search = () => {
     const navigate = useNavigate();
 
     const getDataByUsername = () => {
-        const baseUrl = "http://localhost:8000/users/filter?username="
+        const baseUrl = `/users/filter?username=${username}&page=0`
 
         username.trim() ? 
-        axios.get(baseUrl + username)
+        api.get(baseUrl)
             .then((res) => {
                 setUsers(res.data);
             })
@@ -31,7 +31,7 @@ const Search = () => {
 
     return (
         <div className="container">
-            <div className="input-group mb-5">
+            <div className="input-group mb-2">
                 {/* <span className="input-group-text" id="basic-addon1">@</span> */}
                 <input type="text" onChange={(event) => setUsername(event.target.value)} className="form-control" placeholder="Search..." aria-label="Username" aria-describedby="basic-addon2" />
                 <button 

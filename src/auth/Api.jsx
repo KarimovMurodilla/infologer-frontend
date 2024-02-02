@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 
 const JWTToken = localStorage.getItem('token');
 const api = axios.create({
-    baseURL: 'http://localhost:8000'
+    baseURL: 'https://api.murodilla.com'
 });
 
 

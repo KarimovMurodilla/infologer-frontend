@@ -45,7 +45,7 @@ const VerifyEmail = () => {
     }
 
     return (
-        <div className="container mt-5">
+        <div className="container">
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-6 offset-md-3">

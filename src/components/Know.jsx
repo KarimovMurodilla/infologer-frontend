@@ -9,7 +9,7 @@ import api from "../auth/Api";
 const Know = ({ know }) => {
     const me = getMe();
     const count = know.likes.length;
-    const myId = me && me.id;
+    const myId = me ? me.id : null;
     const status = know.likes.filter(like => like.user_id === myId).length === 1; 
     console.log(know.likes);
     console.log(me.id);

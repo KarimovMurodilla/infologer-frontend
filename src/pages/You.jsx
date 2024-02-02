@@ -68,7 +68,7 @@ const You = () => {
 
                     <div>
                         <h6>About:</h6>
-                        <div className="badge bg-secondary text-wrap" style={{ width: 12 + 'rem' }}>
+                        <div className="badge bg-secondary text-wrap">
                             {user.about}
                         </div>
                     </div>

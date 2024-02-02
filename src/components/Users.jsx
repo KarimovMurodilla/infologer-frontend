@@ -4,7 +4,7 @@ import User from "./User";
 
 const Users = ({ users }) => {
     return (
-        <div class="card">
+        <div className="card">
             <ul className="list-group list-group-flush">
                 {
                     users.map((user) => (
