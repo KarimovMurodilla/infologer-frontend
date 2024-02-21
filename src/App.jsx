@@ -20,47 +20,33 @@ import CheckAuth from "./middlewares/CheckAuth";
 
 
 function App() {
-	// const addUser = (user) => {
-	// 	const id = users.length + 1;
-	// 	setUsers([...users, { id, ...user }]);
-	// };
-
-	// const editUser = (updatedUser) => {
-	// 	setUsers(
-	// 		users.map((user) =>
-	// 			user.id === updatedUser.id ? { ...user, ...updatedUser } : user
-	// 		)
-	// 	);
-	// };
-
-	// const deleteUser = (id) => {
-	// 	setUsers(users.filter((el) => el.id !== id));
-	// };
-
 	return (
-		<Router>
-			<CheckAuth />
-			<div>
-				<Header title="The header" name="" />
-			</div>				
+		<div>
+			<Router>
+				<CheckAuth />
+				<div>
+					<Header title="The header" name="" />
+				</div>				
 
-			<Routes>
-				<Route exact path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
-				<Route exact path="/search" element={<PrivateRoute><Search /></PrivateRoute>} />
-				<Route exact path="/tasks" element={<PrivateRoute><TasksPage /></PrivateRoute>} />
-				<Route exact path="/knows" element={<PrivateRoute><KnowsPage /></PrivateRoute>} />
-				<Route exact path="/:username" element={<PrivateRoute><You /></PrivateRoute>} />
-				<Route exact path="/settings" element={<PrivateRoute><UserSettings /></PrivateRoute>} />
-				<Route exact path="/test" element={<PrivateRoute><YourComponent /></PrivateRoute>} />
-				<Route exact path="/404" element={<PrivateRoute><Page404 /></PrivateRoute>} />
-			</Routes>
-			<Routes>
-				<Route exact path="/auth/login" element={<Login />} />
-				<Route exact path="/auth/signup" element={<Signup />} />
-				<Route exact path="/auth/verify" element={<VerifyEmail />} />				
-				<Route exact path="/auth/google/callback" element={<GoogleOAuth />} />				
-			</Routes>
-		</Router>
+				<Routes>
+					<Route exact path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+					<Route exact path="/search" element={<PrivateRoute><Search /></PrivateRoute>} />
+					<Route exact path="/tasks" element={<PrivateRoute><TasksPage /></PrivateRoute>} />
+					<Route exact path="/knows" element={<PrivateRoute><KnowsPage /></PrivateRoute>} />
+					<Route exact path="/:username" element={<PrivateRoute><You /></PrivateRoute>} />
+					<Route exact path="/settings" element={<PrivateRoute><UserSettings /></PrivateRoute>} />
+					<Route exact path="/test" element={<PrivateRoute><YourComponent /></PrivateRoute>} />
+					<Route exact path="/404" element={<PrivateRoute><Page404 /></PrivateRoute>} />
+				</Routes>
+				<Routes>
+					<Route exact path="/auth/login" element={<Login />} />
+					<Route exact path="/auth/signup" element={<Signup />} />
+					<Route exact path="/auth/verify" element={<VerifyEmail />} />				
+					<Route exact path="/auth/google/callback" element={<GoogleOAuth />} />				
+				</Routes>
+			</Router>			
+		</div>
+
 	);
 }
 

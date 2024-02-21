@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import api from "../auth/Api";
-import Know from "./Know";
+import Know2 from "./Know2";
 import getManyPlaceHolders from "./placeholders/KnowPlaceHolder";
 import Task from "./Task";
 import { TasksContext } from "../pages/Tasks";
@@ -12,6 +12,7 @@ export const OtherUserKnows = ({ userId }) => {
     const [knows, setKnows] = useState([]);
     const [knowsIsLoading, setIsLoading] = useState(true);
     const [isScrollLoading, setOnScrollLoading] = useState(true);
+    const [stopLoad, setStopLoad] = useState(false);
     const [page, setPage] = useState(0);
     const navigate = useNavigate();
 
@@ -20,6 +21,7 @@ export const OtherUserKnows = ({ userId }) => {
             const urlTo = `/knows/${userId}?page=${page}`;
             const response = await api.get(urlTo);
             setKnows((prevData) => [...prevData, ...response.data]);
+            response.data.length === 0 && setStopLoad(true);
             setPage(prevPage => prevPage + 5);
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -49,10 +51,10 @@ export const OtherUserKnows = ({ userId }) => {
         return function () {
             document.removeEventListener('scroll', scrollHandler)
         };
-    }, []);
+    }, [stopLoad]);
 
     const scrollHandler = (e) => {
-        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
+        if (!stopLoad && e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
             setOnScrollLoading(true);
         }
     }
@@ -67,7 +69,7 @@ export const OtherUserKnows = ({ userId }) => {
                 <div className="row mt-4 mb-5 justify-content-center">
                     {
                         knows && knows.slice().map((know) => (
-                            <Know key={know.id} know={know} />
+                            <Know2 key={know.id} know={know} />
                         ))
                     }
                 </div>

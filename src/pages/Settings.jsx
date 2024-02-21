@@ -9,6 +9,20 @@ import api from "../auth/Api";
 import useAuth from "../auth/useAuth";
 import LoadingButton from "../components/Button";
 
+export function getDefaultTheme() {
+    if (typeof window !== 'undefined' && window.matchMedia) {
+        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (prefersDarkMode) {
+            return 'dark';
+        } else {
+            return 'light';
+        }
+    } else {
+        // Handle non-browser environment
+        return 'light';
+    }
+}
 
 const UserSettings = () => {
     // -------------------Profile info-------------------
@@ -24,6 +38,10 @@ const UserSettings = () => {
         about: ''
     });
 
+    const localTheme = localStorage.getItem('theme')
+    const defaultTheme = localTheme ? localTheme : getDefaultTheme();
+    const [theme, setTheme] = useState(defaultTheme);
+
     const navigate = useNavigate();
     const btnStatus = !(userData.first_name.length > 0 && userData.first_name.length <= 25) || !(userData.last_name.length > 0 && userData.last_name.length <= 25);
 
@@ -31,6 +49,7 @@ const UserSettings = () => {
 
     useEffect(() => {
         resetData();
+        document.documentElement.setAttribute('data-bs-theme', theme);
     }, []);
 
     const resetData = () => {
@@ -147,6 +166,13 @@ const UserSettings = () => {
         }
     }
 
+    const handleDarkMode = () => {
+        const newTheme = theme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-bs-theme', newTheme);
+        setTheme(newTheme);
+        localStorage.setItem('theme', newTheme)
+    }
+
     return (
         <div className="container mb-5">
             <nav aria-label="breadcrumb" className="main-breadcrumb">
@@ -165,7 +191,7 @@ const UserSettings = () => {
                                     onClick={() => setActiveTab("profile")}
                                 >
                                     <FiUser className="fs-4" />
-                                    <p className="d-inline ms-1">Profile Information</p>
+                                    <p className="d-inline ms-1">General</p>
                                 </a>
                                 <a
                                     type="button"
@@ -233,6 +259,24 @@ const UserSettings = () => {
                                             </div>)
                                             : ""
                                     }
+                                    <h6>THEME SETTINGS</h6>
+                                    <hr />
+
+                                    <div className="form-check form-switch p-0 mb-3">
+                                        <div className="d-flex flex-row-reverse justify-content-between align-items-center">
+                                            <input
+                                                className="form-check-input fs-5"
+                                                type="checkbox"
+                                                role="switch"
+                                                id="switchCheckLabelStart1"
+                                                checked={theme==='dark'}
+                                                onChange={handleDarkMode}
+                                            />
+                                            <label className="form-check-label" htmlFor="switchCheckLabelStart1">Dark mode</label>
+                                        </div>
+                                    </div>
+                                    <hr />
+
                                     <h6>YOUR PROFILE INFORMATION</h6>
                                     <hr />
                                     <form>

@@ -4,12 +4,12 @@
   font-family: 'Kanit', sans-serif;
 }
 
-body {
+/* body {
   background-color: #bdbdbd;
-}
+} */
 
 .navbar {
-  background-color: #fff;
+  background-color: inherit;
 }
 
 .navbar-brand {
@@ -18,6 +18,12 @@ body {
 
 .navbar-nav .nav-link {
   margin-left: 1em;
+}
+
+.blurred-background {
+  backdrop-filter: blur(10px); /* Adjust the blur value as needed */
+  /* background-color: rgba(255, 255, 255, 0.5); Adjust the background color and opacity */
+  padding: 20px; /* Add padding to your content to make it readable */
 }
 
 .container {
@@ -70,7 +76,7 @@ body {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #fff;
+  /* background-color: #fff; */
   /* box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); */
   border-bottom: 1px solid #4c4c4c;
 }
@@ -215,7 +221,7 @@ input[type=number]::-webkit-outer-spin-button {
   padding: 10px; /* Внутренний отступ для контента внутри поля ввода */
   border: none;
   border-radius: 5px;
-  background-color: #f8f8f8; /* Прозрачный цвет фона */
+  background-color: inherit;
   outline: none; /* Убираем контур вокруг поля ввода при фокусе */
 }
 
@@ -225,7 +231,7 @@ input[type=number]::-webkit-outer-spin-button {
   padding: 10px; /* Внутренний отступ для контента внутри поля ввода */
   border: none;
   border-radius: 5px;
-  background-color: #ffffff; /* Прозрачный цвет фона */
+  background-color: inherit; /* Прозрачный цвет фона */
   outline: none; /* Убираем контур вокруг поля ввода при фокусе */
   resize: auto;
 }

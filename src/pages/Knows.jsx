@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Know from "../components/Know";
 import getManyPlaceHolders from "../components/placeholders/KnowPlaceHolder";
 import api from "../auth/Api";
+import LoadingButton from "../components/Button";
 
 
 export const KnowsContext = createContext();
@@ -12,6 +13,7 @@ const KnowsPage = () => {
     const [knows, setKnows] = useState([]);
     const [knowsIsLoading, setIsLoading] = useState(true);
     const [isScrollLoading, setOnScrollLoading] = useState(true);
+    const [stopLoad, setStopLoad] = useState(false);
     const [page, setPage] = useState(0);
     const location = useLocation();
     const navigate = useNavigate();
@@ -22,11 +24,13 @@ const KnowsPage = () => {
                 const urlTo = `/knows?page=0`;
                 const response = await api.get(urlTo);
                 setKnows(response.data);
+                response.data.length === 0 && setStopLoad(true);
                 setPage(5);
             } else {
                 const urlTo = `/knows?page=${page}`;
                 const response = await api.get(urlTo);
                 setKnows((prevData) => [...prevData, ...response.data]);
+                response.data.length === 0 && setStopLoad(true);
                 setPage(prevPage => prevPage + 5);
             }
 
@@ -54,10 +58,10 @@ const KnowsPage = () => {
         return function () {
             document.removeEventListener('scroll', scrollHandler)
         };
-    }, []);
+    }, [stopLoad]);
 
     const scrollHandler = (e) => {
-        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
+        if (!stopLoad && e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
             setOnScrollLoading(true);
         }
     }
@@ -141,7 +145,7 @@ const Knows = () => {
                                     onClick={handlePost}
                                     disabled={!knowData.title || !knowData.description}
                                 >
-                                    Post
+                                    <LoadingButton isLoading={btnLoading} name="Post" />
                                 </button>
                             </div>
                         </form>
@@ -173,7 +177,7 @@ export const ShowKnows = ({ knows, knowsIsLoading }) => {
                 <div className="row mt-4 mb-5 justify-content-center">
                     {
                         knows && knows.slice().map((know) => (
-                            <Know key={know.id} know={know} />
+                            <Know key={know.id} know={know} inPrivate={true} />
                         ))
                     }
                 </div>

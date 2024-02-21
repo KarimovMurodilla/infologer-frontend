@@ -1,12 +1,12 @@
 import React from "react";
 
 
-const LoadingButton = ({name, is_loading}) => {
-    console.log(is_loading);
+const LoadingButton = ({isLoading, name}) => {
+    console.log(isLoading);
     return (
         <div>
             {
-                is_loading ?
+                isLoading ?
                     <div>
                         <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
                     </div> :

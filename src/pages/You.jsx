@@ -90,7 +90,7 @@ const You = () => {
                         <ul className="col-md-8 nav nav-underline text-center" id="UserTabs">
                             <li className="nav-item">
                                 <a
-                                    className={`nav-link text-dark ${activeTab === "knows" ? "active" : ""}`}
+                                    className={`nav-link ${activeTab === "knows" ? "active" : ""}`}
                                     onClick={(e) => setActiveTab("knows")}
                                 >
                                     Knows
@@ -98,7 +98,7 @@ const You = () => {
                             </li>
                             <li className="nav-item">
                                 <a
-                                    className={`nav-link text-dark ${activeTab === "tasks" ? "active" : ""}`}
+                                    className={`nav-link ${activeTab === "tasks" ? "active" : ""}`}
                                     onClick={(e) => setActiveTab("tasks")}
                                 >
                                     Completed Tasks

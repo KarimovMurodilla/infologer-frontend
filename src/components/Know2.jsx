@@ -6,11 +6,10 @@ import { IoMdMore } from "react-icons/io";
 
 import getMe from "../auth/GetMe";
 import api from "../auth/Api";
-import { KnowsContext } from "../pages/Knows";
 import LoadingButton from "./Button";
 
 
-const Know = ({ know, inPrivate }) => {
+const Know2 = ({ know, inPrivate }) => {
     const me = getMe();
     const count = know.likes.length;
     const myId = me ? me.id : null;
@@ -21,9 +20,6 @@ const Know = ({ know, inPrivate }) => {
     const [isLoading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const { getData } = useContext(KnowsContext);
-
-    console.log(inPrivate);
     const makeDatePretty = ({ originalDateTimeString }) => {
         const options = {
             year: 'numeric',
@@ -69,65 +65,11 @@ const Know = ({ know, inPrivate }) => {
         }
     }
 
-    const handleFeedback = async () => {
-        setLoading(true);
-        try {
-            const headers = {
-                'accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-            await api.get(`/feedback/${know.id}`,
-                { headers }
-            )
-            await getData(true);
-        } catch (error) {
-            if (error.response && error.response.status === 401) {
-                localStorage.clear();
-                navigate("/auth/login");
-            }
-        } finally {
-            setLoading(false);
-        }
-    }
-
     return (
         <div className="col-md-8">
             <div className="card border-secondary mb-3">
                 <div className="card-header d-flex justify-content-between align-items-center">
                     <h5>{know.title}</h5>
-                    {inPrivate && (
-                        <div className="dropdown">
-                            <button className="btn dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="true">
-                                <IoMdMore className="fs-4" />
-                            </button>
-                            <ul className="dropdown-menu dropdown-menu-dark">
-                                <li>
-                                    <button
-                                        className="dropdown-item"
-                                        onClick={handleFeedback}
-                                    >
-                                        AI Feedback
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        className="dropdown-item"
-                                        onClick={null}
-                                    >
-                                        Edit
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        className="dropdown-item text-danger"
-                                        onClick={null}
-                                    >
-                                        Delete
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    )}
                 </div>
                 <div className="card-body">
                     <blockquote className="blockquote mb-0">
@@ -139,7 +81,7 @@ const Know = ({ know, inPrivate }) => {
                     </blockquote>
 
                     <LoadingButton isLoading={isLoading} name="" />
-                    {know.feedback &&
+                    {know.feedback && 
                         (<blockquote className="blockquote mt-3">
                             <span className="badge bg-primary text-wrap">AI Feedback</span>
                             <code className="d-block">{know.feedback.description}</code>
@@ -171,4 +113,4 @@ const Know = ({ know, inPrivate }) => {
     );
 }
 
-export default Know;
+export default Know2;

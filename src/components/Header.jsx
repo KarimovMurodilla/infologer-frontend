@@ -6,19 +6,26 @@ import { MdLightbulbOutline, MdOutlineAccountCircle } from "react-icons/md";
 import { AiOutlineHome, AiOutlineSearch } from "react-icons/ai";
 
 import getMe from "../auth/GetMe";
+import { getDefaultTheme } from "../pages/Settings";
 
 
 const Header = () => {
     const [me, setUserData] = useState(getMe());
     const location = useLocation();
+    const localTheme = localStorage.getItem('theme')
+    const defaultTheme = localTheme ? localTheme : getDefaultTheme();
+    const [theme, setTheme] = useState(defaultTheme);
 
     useEffect(() => {
+        // console.log(theme);
+        // setTheme(defaultTheme);
         setUserData(getMe());
+        document.documentElement.setAttribute('data-bs-theme', defaultTheme);
     }, [location]);
 
     return (
         <div>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-bottom d-lg-none">
+            <nav className="navbar navbar-expand-lg fixed-bottom d-lg-none blurred-background">
                 <div className="container-fluid">
                     <ul className="navbar-nav w-100">
                         <div className="d-flex justify-content-between align-items-center">
@@ -52,10 +59,10 @@ const Header = () => {
                 </div>
             </nav>
 
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg">
                 <div className="container-fluid">
                     <Link to="/" className="navbar-brand">
-                        Todogram
+                        Infologer
                         <button className="badge btn btn-outline-primary text-wrap ms-1" disabled>
                             Beta
                         </button>

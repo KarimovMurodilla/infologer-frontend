@@ -193,17 +193,18 @@ const ShowTasks = ({ showCompleted }) => {
                     }
 
                     {
-                        tasks.filter(task => task.status === true) &&
-                        <div className="row mt-4 mb-5 justify-content-center">
-                            {!showCompleted && <h3 className="text-center mb-4">Completed tasks</h3>}
-                            {
-                                tasks &&
-                                tasks
-                                    .filter(task => task.status === true)
-                                    .slice()
-                                    .map(task => <Task key={task.id} task={task} status={true} />)
-                            }
-                        </div>
+                        tasks.filter(task => task.status === true) && (
+                            <div className="row mt-4 mb-5 justify-content-center">
+                                {!showCompleted && <h3 className="text-center mb-4">Completed tasks</h3>}
+                                {
+                                    tasks &&
+                                    tasks
+                                        .filter(task => task.status === true)
+                                        .slice()
+                                        .map(task => <Task key={task.id} task={task} status={true} />)
+                                }
+                            </div>
+                        )
                     }
                 </div>
             ) : (
