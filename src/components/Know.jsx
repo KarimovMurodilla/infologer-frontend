@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaRegComment } from "react-icons/fa";
 import { FaLightbulb, FaRegLightbulb } from "react-icons/fa6";
 import { IoMdMore } from "react-icons/io";
+import ReactMarkdown from 'react-markdown';
 
 import getMe from "../auth/GetMe";
 import api from "../auth/Api";
@@ -142,7 +143,11 @@ const Know = ({ know, inPrivate }) => {
                     {know.feedback &&
                         (<blockquote className="blockquote mt-3">
                             <span className="badge bg-primary text-wrap">AI Feedback</span>
-                            <code className="d-block">{know.feedback.description}</code>
+                            <code className="d-block">
+                                <ReactMarkdown>
+                                    {know.feedback.description}
+                                </ReactMarkdown>
+                            </code>
                         </blockquote>)
                     }
                 </div>

@@ -29,7 +29,7 @@ function App() {
 				</div>				
 
 				<Routes>
-					<Route exact path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+					<Route exact path="/" element={<Home />} />
 					<Route exact path="/search" element={<PrivateRoute><Search /></PrivateRoute>} />
 					<Route exact path="/tasks" element={<PrivateRoute><TasksPage /></PrivateRoute>} />
 					<Route exact path="/knows" element={<PrivateRoute><KnowsPage /></PrivateRoute>} />
